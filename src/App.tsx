@@ -21,7 +21,7 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${result ? "has-result" : "no-result"}`}>
       <ReflectionForm onSubmit={handleReflection} isLoading={isLoading} />
       <ResultCard result={result} />
     </main>
