@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ReflectionForm from "./components/ReflectionForm";
 import ResultCard from "./components/ResultCard";
-import { mockResult } from "./data/mockResult";
+import { generateReflection } from "./utils/generateReflection";
 import type { ReflectionInput, ReflectionResult } from "./types";
 
 export default function App() {
@@ -16,7 +16,8 @@ export default function App() {
     // Mock delay to simulate AI processing
     await new Promise((resolve) => setTimeout(resolve, 1200));
 
-    setResult(mockResult);
+    const smartResult = generateReflection(data);
+    setResult(smartResult);
     setIsLoading(false);
   }
 
