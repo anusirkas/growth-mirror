@@ -37,7 +37,7 @@ export default function ReflectionForm({
 
   return (
     <form className="card form-card" onSubmit={handleSubmit}>
-      <p className="eyebrow">AI reflection tool for junior and self-taught builders</p>
+      <p className="eyebrow">AI reflection tool for junior builders and continuous learners</p>
       <h1>Growth Mirror</h1>
       <p className="subtitle">
         Reflect on your week and get a clearer next step.
