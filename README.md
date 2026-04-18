@@ -1,6 +1,6 @@
 # Growth Mirror
 
-Growth Mirror is a simple AI-inspired reflection tool designed for junior and self-taught builders.
+Growth Mirror is a simple AI-inspired reflection tool designed for junior builders and people growing their careers through continuous learning.
 
 It helps users reflect on their week and gain clarity on:
 
@@ -15,7 +15,7 @@ The goal is not to track more tasks — it is to reduce uncertainty and create m
 
 ## The Problem
 
-As a self-taught developer, one of the hardest challenges is not learning itself — it is knowing whether you are actually progressing.
+As a junior developer, one of the hardest challenges is not learning itself — it is knowing whether you are actually progressing.
 
 When you work full-time, switch between multiple responsibilities, and learn mostly independently, progress often feels invisible.
 
@@ -24,9 +24,9 @@ You can be busy every day and still feel like you are standing still.
 This is especially common for:
 
 * junior developers
-* self-taught builders
 * career switchers
 * people learning while working full-time
+* builders growing through both practical work and continuous learning
 
 Urgent work often replaces important growth, and without reflection, it becomes difficult to see what is actually moving you forward.
 
@@ -175,7 +175,7 @@ Below is an example of how a live LLM-powered version would work.
 Instead of keyword scoring, the reflection would be analyzed through a structured AI prompt focused on clarity, not generic motivation.
 
 ```text
-You are an honest career growth reflection assistant for self-taught developers and junior builders.
+You are an honest career growth reflection assistant for junior developers and builders growing their careers through continuous learning.
 
 Your job is not to motivate blindly, but to help identify real progress, blind spots, and the next practical step.
 
