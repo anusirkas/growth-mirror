@@ -37,6 +37,7 @@ export default function ReflectionForm({
 
   return (
     <form className="card form-card" onSubmit={handleSubmit}>
+      <p className="eyebrow">AI reflection tool for self-taught builders</p>
       <h1>Growth Mirror</h1>
       <p className="subtitle">
         Reflect on your week and get a clearer next step.
@@ -49,7 +50,7 @@ export default function ReflectionForm({
           value={form.workedOn}
           onChange={handleChange}
           placeholder="Projects, coding, design work, problem-solving..."
-          rows={4}
+          rows={2}
           required
         />
       </label>
@@ -61,7 +62,7 @@ export default function ReflectionForm({
           value={form.learned}
           onChange={handleChange}
           placeholder="Concepts, tools, mistakes, insights..."
-          rows={4}
+          rows={2}
           required
         />
       </label>
@@ -73,7 +74,7 @@ export default function ReflectionForm({
           value={form.difficult}
           onChange={handleChange}
           placeholder="Confusion, blockers, frustration..."
-          rows={4}
+          rows={2}
           required
         />
       </label>
@@ -85,7 +86,7 @@ export default function ReflectionForm({
           value={form.avoided}
           onChange={handleChange}
           placeholder="Things that matter but kept slipping..."
-          rows={4}
+          rows={2}
           required
         />
       </label>
@@ -97,7 +98,7 @@ export default function ReflectionForm({
           value={form.improve}
           onChange={handleChange}
           placeholder="Skill, habit, confidence, consistency..."
-          rows={4}
+          rows={2}
           required
         />
       </label>

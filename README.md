@@ -1,73 +1,110 @@
-# React + TypeScript + Vite
+# Growth Mirror
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Growth Mirror is a simple AI-inspired reflection tool for self-taught developers and junior builders.
 
-Currently, two official plugins are available:
+It helps users reflect on their week and get a clearer sense of:
+- where real progress happened
+- what is slowing them down
+- what to focus on next
+- what practical step to take next
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## The problem
 
-## React Compiler
+When you are learning while also working, progress often feels invisible.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+You may be busy every day, but still feel unsure whether you are actually moving forward in the right direction.
 
-## Expanding the ESLint configuration
+This is especially common for self-taught developers, junior builders, and career switchers who:
+- learn from different sources
+- juggle work and growth at the same time
+- struggle with focus and direction
+- postpone important learning because urgent work gets in the way
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## The solution
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Growth Mirror is a lightweight weekly reflection tool.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The user writes:
+- what they worked on
+- what they learned
+- what felt difficult
+- what they avoided
+- what they want to improve next
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The app then returns a structured reflection:
+- Progress Spotted
+- Biggest Gap
+- Next Week Focus
+- Practical Next Step
+
+## Why I built it this way
+
+I deliberately kept the MVP narrow.
+
+This is not a task manager or a habit tracker.
+The goal is not to track activity, but to create clarity.
+
+I chose reflection over planning because tracking tasks does not always show meaningful growth.
+
+## MVP scope
+
+Included:
+- Weekly reflection form
+- Structured response card
+- Clear and simple UI
+- React + TypeScript frontend prototype
+
+Deliberately left out:
+- authentication
+- reminders
+- dashboards
+- history tracking
+- course integrations
+- live LLM API integration
+
+## Why no live AI model yet?
+
+For this prototype, I focused first on validating the core product flow:
+reflection in → clarity out.
+
+A live LLM integration would be the next step, but I intentionally prioritized product thinking, scope control, and user flow first.
+
+## Tech stack
+
+- React
+- TypeScript
+- Vite
+- CSS
+
+## Screenshot
+
+![Growth Mirror screenshot](./public/growth-mirror-demo.png)
+
+## Running locally
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Future improvements
+- live LLM integration through a server-side function
+- saved reflection history
+- weekly comparison view
+- monthly growth summaries
+- optional learning tracker for courses and milestones
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+# 5. Screenshot README jaoks
+
+Tee nii:
+
+1. täida form päris sisuga  
+2. vajuta submit  
+3. tee screenshot nii, et form vasakul + result paremal  
+4. salvesta fail näiteks:
+
+```text
+public/growth-mirror-demo.png

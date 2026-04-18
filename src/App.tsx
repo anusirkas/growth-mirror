@@ -14,7 +14,7 @@ export default function App() {
     setIsLoading(true);
 
     // Mock delay to simulate AI processing
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1200));
 
     setResult(mockResult);
     setIsLoading(false);
