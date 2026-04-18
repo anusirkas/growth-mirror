@@ -1,9 +1,13 @@
 :root {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #111827;
-  background: #f5f7fb;
+  background:
+    radial-gradient(circle at top left, rgba(168, 85, 247, 0.12), transparent 28%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 30%),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
 }
 
 * {
@@ -13,12 +17,17 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: #f3f4f6;
+  color: #111827;
+  background: transparent;
 }
 
 button,
 textarea {
   font: inherit;
+}
+
+#root {
+  min-height: 100vh;
 }
 
 .app-shell {
@@ -30,7 +39,7 @@ textarea {
 }
 
 .app-shell.no-result {
-  max-width: 720px;
+  max-width: 760px;
 }
 
 .app-shell.has-result {
@@ -45,17 +54,36 @@ textarea {
 }
 
 .card {
-  background: white;
-  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 10px rgba(15, 23, 42, 0.04);
 }
 
 .form-card h1 {
   margin-top: 0;
   margin-bottom: 8px;
-  font-size: 2.2rem;
-  line-height: 1.1;
+  font-size: 2.25rem;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.eyebrow {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.1);
+  color: #4f46e5;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .subtitle {
@@ -63,6 +91,7 @@ textarea {
   margin-bottom: 22px;
   color: #6b7280;
   font-size: 0.98rem;
+  max-width: 52ch;
 }
 
 label {
@@ -76,33 +105,46 @@ textarea {
   width: 100%;
   margin-top: 8px;
   border: 1px solid #d1d5db;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 10px 12px;
   resize: vertical;
   min-height: 72px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: rgba(255, 255, 255, 0.92);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+textarea::placeholder {
+  color: #9ca3af;
 }
 
 textarea:focus {
   outline: none;
-  border-color: #9ca3af;
-  box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.06);
+  border-color: #818cf8;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
 }
 
 button {
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   padding: 14px 18px;
-  background: #111827;
+  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
   color: white;
   font-weight: 700;
   cursor: pointer;
   width: 100%;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    opacity 0.15s ease;
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.22);
 }
 
 button:hover:not(:disabled) {
   transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(79, 70, 229, 0.28);
 }
 
 button:disabled {
@@ -110,18 +152,92 @@ button:disabled {
   cursor: wait;
 }
 
+.result-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 100%;
+  height: 120px;
+  background: linear-gradient(
+    135deg,
+    rgba(99, 102, 241, 0.12),
+    rgba(59, 130, 246, 0.04)
+  );
+  pointer-events: none;
+}
+
+.result-header {
+  position: relative;
+  margin-bottom: 22px;
+}
+
+.result-badge {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.1);
+  color: #4338ca;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
 .result-card h2 {
+  position: relative;
   margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
+  margin-bottom: 8px;
+  font-size: 1.55rem;
+  letter-spacing: -0.02em;
+}
+
+.result-intro {
+  margin: 0;
+  color: #6b7280;
+  max-width: 42ch;
 }
 
 .section + .section {
   margin-top: 18px;
 }
 
+.section {
+  position: relative;
+  padding: 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.section-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.1);
+  color: #4338ca;
+  font-size: 0.95rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
 .section h2 {
-  margin: 0 0 8px;
+  margin: 0;
   font-size: 1rem;
 }
 
@@ -130,11 +246,22 @@ button:disabled {
   color: #374151;
   line-height: 1.6;
 }
-.eyebrow {
-  margin: 0 0 10px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b7280;
+
+@media (max-width: 640px) {
+  .app-shell {
+    padding: 24px 14px 40px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .form-card h1 {
+    font-size: 1.9rem;
+  }
+
+  .result-card h2 {
+    font-size: 1.35rem;
+  }
 }
