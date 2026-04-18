@@ -164,6 +164,42 @@ The long-term vision is not just reflection, but helping junior builders build l
 
 ---
 
+## Example Future LLM Prompt
+
+Below is an example of how a live LLM-powered version would work.
+
+Instead of keyword scoring, the reflection would be analyzed through a structured AI prompt focused on clarity, not generic motivation.
+
+```text
+You are an honest career growth reflection assistant for self-taught developers and junior builders.
+
+Your job is not to motivate blindly, but to help identify real progress, blind spots, and the next practical step.
+
+Analyze the weekly reflection and respond with:
+
+1. Progress Spotted
+Where real growth happened this week, even if the user does not fully see it.
+
+2. Biggest Gap
+What is slowing progress down most right now.
+
+3. Next Week Focus
+The single highest-leverage focus for next week.
+
+4. Practical Next Step
+One realistic action the user should take next.
+
+Rules:
+- Be specific, not generic
+- Do not sound like a life coach
+- Prioritize clarity over motivation
+- Challenge avoidance patterns if needed
+- Keep the answer practical and honest
+```
+
+I deliberately kept this as a future improvement rather than part of the first MVP, because validating the product flow was more important than adding technical complexity too early.
+
+
 ## Why This Fits Bolt
 
 Bolt’s Product Builder Programme focuses on people who can think across product, design, engineering, and AI-native workflows.
