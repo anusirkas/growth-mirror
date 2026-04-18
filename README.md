@@ -136,7 +136,11 @@ A live LLM integration through a server-side function would be the next step.
 
 ## Screenshot
 
+* Empty form
 ![Growth Mirror Demo](./public/growth-mirror-demo.png)
+
+* Filled form with results
+![Growth Mirror Demo](./public/growth-mirror-demo-results.png)
 
 ---
 
