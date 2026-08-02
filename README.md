@@ -4,10 +4,10 @@ Growth Mirror is a simple AI-inspired reflection tool designed for junior builde
 
 It helps users reflect on their week and gain clarity on:
 
-* where real progress happened
-* what is slowing them down
-* what to focus on next
-* what practical step to take next
+- where real progress happened
+- what is slowing them down
+- what to focus on next
+- what practical step to take next
 
 The goal is not to track more tasks — it is to reduce uncertainty and create momentum.
 
@@ -23,10 +23,10 @@ You can be busy every day and still feel like you are standing still.
 
 This is especially common for:
 
-* junior developers
-* career switchers
-* people learning while working full-time
-* builders growing through both practical work and continuous learning
+- junior developers
+- career switchers
+- people learning while working full-time
+- builders growing through both practical work and continuous learning
 
 Urgent work often replaces important growth, and without reflection, it becomes difficult to see what is actually moving you forward.
 
@@ -40,11 +40,11 @@ Instead of functioning like a task manager, it acts as a clarity tool.
 
 The user writes:
 
-* What did I work on this week?
-* What did I learn this week?
-* What felt difficult?
-* What did I avoid or postpone?
-* What do I want to improve next?
+- What did I work on this week?
+- What did I learn this week?
+- What felt difficult?
+- What did I avoid or postpone?
+- What do I want to improve next?
 
 The app then generates a structured reflection:
 
@@ -86,12 +86,12 @@ The goal was to help users answer one important question:
 
 I intentionally avoided features like:
 
-* dashboards
-* streaks
-* reminders
-* course integrations
-* calendar views
-* complex progress tracking
+- dashboards
+- streaks
+- reminders
+- course integrations
+- calendar views
+- complex progress tracking
 
 because those often create more noise instead of better decisions.
 
@@ -112,9 +112,9 @@ For this prototype, I intentionally mocked the intelligence layer first instead 
 
 The system uses weighted keyword scoring to identify the dominant reflection pattern across three core areas:
 
-* Focus & prioritization
-* Technical growth
-* Confidence & self-doubt
+- Focus & prioritization
+- Technical growth
+- Confidence & self-doubt
 
 Instead of simple first-match logic, the app scores signals across all user inputs and returns the strongest reflection path.
 
@@ -126,21 +126,21 @@ A live LLM integration through a server-side function would be the next step.
 
 ## Tech Stack
 
-* React
-* TypeScript
-* Vite
-* CSS
-* Product logic through structured reflection scoring
+- React
+- TypeScript
+- Vite
+- CSS
+- Product logic through structured reflection scoring
 
 ---
 
 ## Screenshot
 
-* Empty form
-![Growth Mirror Demo](./public/growth-mirror-demo.png)
+- Empty form
+  ![Growth Mirror Demo](./public/growth-mirror-demo.png)
 
-* Filled form with results
-![Growth Mirror Demo](./public/growth-mirror-demo-results.png)
+- Filled form with results
+  ![Growth Mirror Demo](./public/growth-mirror-demo-results.png)
 
 ---
 
@@ -157,12 +157,12 @@ npm run dev
 
 Next iterations would include:
 
-* live LLM integration through a secure server-side function
-* saved weekly reflection history
-* monthly progress comparison
-* portfolio milestone tracking
-* optional learning tracker for courses and skill development
-* personalized growth patterns over time
+- live LLM integration through a secure server-side function
+- saved weekly reflection history
+- monthly progress comparison
+- portfolio milestone tracking
+- optional learning tracker for courses and skill development
+- personalized growth patterns over time
 
 The long-term vision is not just reflection, but helping junior builders build long-term career momentum with clarity.
 
@@ -202,15 +202,3 @@ Rules:
 ```
 
 I deliberately kept this as a future improvement rather than part of the first MVP, because validating the product flow was more important than adding technical complexity too early.
-
-
-## Why This Fits Bolt
-
-Bolt’s Product Builder Programme focuses on people who can think across product, design, engineering, and AI-native workflows.
-
-Growth Mirror reflects exactly that mindset:
-identifying a real problem, keeping scope intentional, using AI as leverage, and building something simple that solves meaningful friction.
-
-The goal was not to make something impressive.
-
-The goal was to make something useful.
