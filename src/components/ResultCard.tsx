@@ -1,15 +1,10 @@
-import type { ReflectionResponse, Theme } from "../types";
-import Section from "./Section";
+import { THEMES } from "../lib/themes";
+import type { ReflectionResponse } from "../types";
 
 type ResultCardProps = {
-  response: ReflectionResponse | null;
-};
-
-const THEME_LABEL: Record<Theme, string> = {
-  focus: "Pattern: scattered focus",
-  technical: "Pattern: technical growth",
-  confidence: "Pattern: confidence",
-  momentum: "Pattern: building momentum",
+  response: ReflectionResponse;
+  /** Extra content under the practical step, e.g. the follow-through toggle. */
+  footer?: React.ReactNode;
 };
 
 const FALLBACK_REASON: Record<NonNullable<ReflectionResponse["reason"]>, string> = {
@@ -20,42 +15,45 @@ const FALLBACK_REASON: Record<NonNullable<ReflectionResponse["reason"]>, string>
   timeout: "the AI took too long",
 };
 
-export default function ResultCard({ response }: ResultCardProps) {
-  if (!response) return null;
+const SECTIONS = [
+  { key: "progressSpotted", title: "Progress spotted" },
+  { key: "biggestGap", title: "Biggest gap" },
+  { key: "nextWeekFocus", title: "Next week's focus" },
+] as const;
+
+export default function ResultCard({ response, footer }: ResultCardProps) {
   const { result, source, reason, model } = response;
+  const theme = THEMES[result.theme];
 
   return (
-    <div className="card result-card" aria-live="polite">
-      <div className="result-header">
-        <div className="result-meta">
-          <p className="result-badge">Weekly reflection summary</p>
-          <p className="theme-chip">{THEME_LABEL[result.theme]}</p>
-        </div>
-        <h2>Your Growth Reflection</h2>
-        <p className="result-intro">A clearer view of your progress, blind spots, and next step.</p>
-      </div>
+    <article className="reflection" aria-live="polite">
+      <header className="reflection-head">
+        <p className="label">Reflection</p>
+        <p className="theme-tag" style={{ "--tag": theme.color } as React.CSSProperties}>
+          {theme.label}
+        </p>
+      </header>
 
-      <Section title="Progress Spotted" icon="↗">
-        <p>{result.progressSpotted}</p>
-      </Section>
+      {SECTIONS.map((s) => (
+        <section key={s.key} className="note">
+          <h3>{s.title}</h3>
+          <p>{result[s.key]}</p>
+        </section>
+      ))}
 
-      <Section title="Biggest Gap" icon="⚠">
-        <p>{result.biggestGap}</p>
-      </Section>
-
-      <Section title="Next Week Focus" icon="→">
-        <p>{result.nextWeekFocus}</p>
-      </Section>
-
-      <Section title="Practical Next Step" icon="✓">
+      <section className="note step">
+        <h3>Your next step</h3>
         <p>{result.practicalNextStep}</p>
-      </Section>
+        {footer}
+      </section>
 
-      <p className={`source-note source-${source}`}>
+      <p className={`source source-${source}`}>
         {source === "gemini"
-          ? `Written by ${model ?? "Gemini"} from your answers, then checked against a schema before showing it.`
-          : `Rule-based reflection: ${reason ? FALLBACK_REASON[reason] : "the AI is unavailable"}, so this came from keyword scoring instead.`}
+          ? model === "Example entry"
+            ? "Example entry."
+            : `Written by ${model ?? "Gemini"} from your answers, checked against a schema before showing it.`
+          : `Rule-based reflection: ${reason ? FALLBACK_REASON[reason] : "the AI is unavailable"}, so this came from keyword scoring.`}
       </p>
-    </div>
+    </article>
   );
 }

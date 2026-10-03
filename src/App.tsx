@@ -1,41 +1,33 @@
-import { useState } from "react";
-import ReflectionForm from "./components/ReflectionForm";
-import ResultCard from "./components/ResultCard";
-import type { ReflectionInput, ReflectionResponse } from "./types";
-import { generateReflection } from "./utils/generateReflection";
+import { useEffect } from "react";
+import Header from "./components/Header";
+import { seedExamplesOnce, useRoute } from "./lib/hooks";
+import HistoryPage from "./pages/HistoryPage";
+import ProgressPage from "./pages/ProgressPage";
+import WritePage from "./pages/WritePage";
 
 export default function App() {
-  const [response, setResponse] = useState<ReflectionResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const route = useRoute();
 
-  async function handleReflection(data: ReflectionInput) {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/reflect", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      const body = await res.json();
-      if (!res.ok) {
-        setError(body.error ?? "Something went wrong. Please try again.");
-        return;
-      }
-      setResponse(body as ReflectionResponse);
-    } catch {
-      // offline or the API is unreachable: still give the user a reflection
-      setResponse({ result: generateReflection(data), source: "fallback", reason: "ai-error" });
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  useEffect(() => {
+    seedExamplesOnce();
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [route.page]);
 
   return (
-    <main className={`app-shell ${response ? "has-result" : "no-result"}`}>
-      <ReflectionForm onSubmit={handleReflection} isLoading={isLoading} error={error} />
-      <ResultCard response={response} />
-    </main>
+    <div className="shell">
+      <Header current={route.page} />
+      <main>
+        {route.page === "write" && <WritePage />}
+        {route.page === "history" && <HistoryPage id={route.id} />}
+        {route.page === "progress" && <ProgressPage />}
+      </main>
+      <footer className="site-footer">
+        <span>Growth Mirror · a weekly reflection journal</span>
+        <a href="https://portfolio-anu-sirkas-projects.vercel.app">Made by Anu Sirkas</a>
+      </footer>
+    </div>
   );
 }

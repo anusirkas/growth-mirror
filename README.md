@@ -1,204 +1,104 @@
 # Growth Mirror
 
-Growth Mirror is a simple AI-inspired reflection tool designed for junior builders and people growing their careers through continuous learning.
+[![CI](https://github.com/anusirkas/growth-mirror/actions/workflows/ci.yml/badge.svg)](https://github.com/anusirkas/growth-mirror/actions/workflows/ci.yml)
 
-It helps users reflect on their week and gain clarity on:
+A weekly reflection journal for junior developers and people learning while they work. You answer five questions about your week; an AI reads them and gives back where you grew, what's slowing you down and **one concrete next step**. Next week it asks whether you took it, and over time the journal shows your patterns.
 
-- where real progress happened
-- what is slowing them down
-- what to focus on next
-- what practical step to take next
+**Live:** https://growth-mirror.vercel.app · built by [Anu Sirkas](https://portfolio-anu-sirkas-projects.vercel.app)
 
-The goal is not to track more tasks — it is to reduce uncertainty and create momentum.
+![A week's answers on a journal page, with Gemini's reflection beside it](docs/screenshots/reflection.webp)
 
----
+| Progress | Journal |
+|---|---|
+| ![Progress: follow-through rate, pattern mix and a weekly timeline](docs/screenshots/progress.webp) | ![Journal: one entry per week with its pattern and next step](docs/screenshots/journal.webp) |
 
-## The Problem
+## Why
 
-As a junior developer, one of the hardest challenges is not learning itself — it is knowing whether you are actually progressing.
+When you work full-time and learn on the side, progress becomes invisible: busy every day, yet it feels like standing still. Growth Mirror is deliberately narrow. It isn't a task manager, habit tracker or dashboard of streaks. It's one loop:
 
-When you work full-time, switch between multiple responsibilities, and learn mostly independently, progress often feels invisible.
+**reflect → one step → did you take it? → reflect again**
 
-You can be busy every day and still feel like you are standing still.
+The follow-through question is what turns advice into a habit, and it's the number the progress page leads with.
 
-This is especially common for:
+## Architecture
 
-- junior developers
-- career switchers
-- people learning while working full-time
-- builders growing through both practical work and continuous learning
+```
+Browser (React + TypeScript, Vite)
+  │  journal in localStorage (never sent anywhere)
+  │
+  └─ POST /api/reflect ──► Vercel Function (server/reflect.ts)
+                             ├─ validate + trim input (5 answers, ≤1500 chars each)
+                             ├─ per-IP rate limit (8 per 10 min, best effort per instance)
+                             ├─ Gemini with a JSON schema, 15 s timeout
+                             │     gemini-3.8-flash ──(429/503)──► gemini-3.1-flash-lite
+                             ├─ validate the model's JSON before it reaches the user
+                             └─ anything goes wrong ──► rule-based reflection (src/utils)
+```
 
-Urgent work often replaces important growth, and without reflection, it becomes difficult to see what is actually moving you forward.
+The Gemini key lives only in the function's environment; the browser never sees it. In development a small Vite plugin serves `/api/reflect` with the same handler, so the whole flow runs with `npm run dev`.
 
----
+## Designing the AI part
 
-## The Solution
+- **Structured output, then validation.** The request carries a JSON Schema (theme enum plus four text fields), and the reply is still parsed and checked server-side: missing fields, unknown themes or suspiciously long text count as a failure.
+- **It always answers.** No key, rate limit, timeout, API error or off-schema output all fall back to keyword scoring, and the UI says which one happened ("Rule-based reflection: the AI took too long…"), so the result is never silently worse.
+- **Two models.** The free tier returns 503 at busy times, so a lighter model is tried before falling back.
+- **Thinking budget.** Gemini 3 models reason before answering and those tokens count towards the output limit. With the default level the first replies were cut off mid-JSON (`finishReason: MAX_TOKENS` after ~760 thinking tokens); a low thinking level and a 2 048-token cap fixed it.
+- **Prompt.** The system prompt asks for specific, non-coaching language tied to what the user wrote, in the user's language. Answers are fenced as data and the prompt says to ignore instructions inside them. See `server/prompt.ts`.
+- **Privacy.** Reflections aren't stored on the server. The page says plainly that answers go to Google and that free-tier requests may be used to improve Google's models.
 
-Growth Mirror is a lightweight weekly reflection system.
+## The journal
 
-Instead of functioning like a task manager, it acts as a clarity tool.
+Entries live in `localStorage` behind a small store read with `useSyncExternalStore` (synced across tabs). One entry per ISO week (`src/lib/journal.ts`); the latest reflection in a week wins. The progress page derives everything from the entries: follow-through rate over answered weeks, pattern mix and a timeline. A first visit gets eight example weeks of a fictional junior developer, flagged and removable, so the journal and progress views aren't empty.
 
-The user writes:
+## Project structure
 
-- What did I work on this week?
-- What did I learn this week?
-- What felt difficult?
-- What did I avoid or postpone?
-- What do I want to improve next?
+```
+api/reflect.ts            Vercel Function entry
+server/
+  reflect.ts              request handling, rate limit, timeout, fallback
+  gemini.ts               model calls with backup model
+  prompt.ts               system prompt, user prompt, JSON schema
+src/
+  lib/validate.ts         input validation and model-output parsing (shared)
+  lib/journal.ts          entries, ISO weeks, stats, storage
+  utils/generateReflection.ts   rule-based fallback
+  pages/                  This week, Journal, Progress
+  components/             form, reflection, follow-through, header
+e2e/                      Playwright tests
+```
 
-The app then generates a structured reflection:
+## Tests
 
-### Progress Spotted
+```bash
+npm test           # 18 unit tests (Vitest)
+npm run test:e2e   # 16 end-to-end tests (Playwright, desktop and mobile)
+```
 
-Where real growth happened
+Unit tests cover input validation, parsing model output, the fallback scorer, ISO weeks and journal stats, and the request handler in every branch: success, bad input, no key, model error, off-schema output, timeout (fake timers) and rate limiting. The model is injected, so tests never call Gemini.
 
-### Biggest Gap
+End-to-end tests run the dev server with the key blanked and stub the API in the browser where needed: AI and fallback results, an unreachable API, server validation errors, the example journal, follow-through updating the progress rate, and deleting a week from the timeline.
 
-What is slowing progress down most
+CI runs lint, type-checking, unit tests and a production build, then the end-to-end suite, on every push.
 
-### Next Week Focus
-
-The single highest-leverage focus
-
-### Practical Next Step
-
-One realistic action for momentum
-
----
-
-## Why I Built It This Way
-
-I deliberately kept the MVP narrow.
-
-This is not a task manager, habit tracker, or productivity dashboard.
-
-Tracking activity does not always mean meaningful growth.
-
-I chose reflection over planning because the real problem is often not lack of effort — it is lack of clarity.
-
-The goal was to help users answer one important question:
-
-**“Am I actually moving forward?”**
-
----
-
-## Product Thinking Behind the MVP
-
-I intentionally avoided features like:
-
-- dashboards
-- streaks
-- reminders
-- course integrations
-- calendar views
-- complex progress tracking
-
-because those often create more noise instead of better decisions.
-
-I wanted the first version to validate one core product loop:
-
-### reflection in → clarity out
-
-before expanding into larger features.
-
-This mirrors how I think about product building:
-start small, solve one real problem well, then iterate.
-
----
-
-## AI Logic
-
-For this prototype, I intentionally mocked the intelligence layer first instead of integrating a live LLM API.
-
-The system uses weighted keyword scoring to identify the dominant reflection pattern across three core areas:
-
-- Focus & prioritization
-- Technical growth
-- Confidence & self-doubt
-
-Instead of simple first-match logic, the app scores signals across all user inputs and returns the strongest reflection path.
-
-This creates more realistic and personalized output while keeping the MVP lightweight and focused.
-
-A live LLM integration through a server-side function would be the next step.
-
----
-
-## Tech Stack
-
-- React
-- TypeScript
-- Vite
-- CSS
-- Product logic through structured reflection scoring
-
----
-
-## Screenshot
-
-- Empty form
-  ![Growth Mirror Demo](./public/growth-mirror-demo.png)
-
-- Filled form with results
-  ![Growth Mirror Demo](./public/growth-mirror-demo-results.png)
-
----
-
-## Running Locally
+## Run locally
 
 ```bash
 npm install
 npm run dev
 ```
 
----
+Without a key every reflection is rule-based. To use Gemini, create a free key at [Google AI Studio](https://aistudio.google.com) and add it to `.env.local`:
 
-## Future Improvements
-
-Next iterations would include:
-
-- live LLM integration through a secure server-side function
-- saved weekly reflection history
-- monthly progress comparison
-- portfolio milestone tracking
-- optional learning tracker for courses and skill development
-- personalized growth patterns over time
-
-The long-term vision is not just reflection, but helping junior builders build long-term career momentum with clarity.
-
----
-
-## Example Future LLM Prompt
-
-Below is an example of how a live LLM-powered version would work.
-
-Instead of keyword scoring, the reflection would be analyzed through a structured AI prompt focused on clarity, not generic motivation.
-
-```text
-You are an honest career growth reflection assistant for junior developers and builders growing their careers through continuous learning.
-
-Your job is not to motivate blindly, but to help identify real progress, blind spots, and the next practical step.
-
-Analyze the weekly reflection and respond with:
-
-1. Progress Spotted
-Where real growth happened this week, even if the user does not fully see it.
-
-2. Biggest Gap
-What is slowing progress down most right now.
-
-3. Next Week Focus
-The single highest-leverage focus for next week.
-
-4. Practical Next Step
-One realistic action the user should take next.
-
-Rules:
-- Be specific, not generic
-- Do not sound like a life coach
-- Prioritize clarity over motivation
-- Challenge avoidance patterns if needed
-- Keep the answer practical and honest
+```bash
+GEMINI_API_KEY=...
 ```
 
-I deliberately kept this as a future improvement rather than part of the first MVP, because validating the product flow was more important than adding technical complexity too early.
+## Trade-offs
+
+- **Journal per browser.** No accounts, so a journal doesn't follow you between devices. Storing reflections server-side would need auth and a clear privacy story.
+- **Best-effort rate limiting.** The in-memory limit resets when a serverless instance is recycled; a shared store (e.g. Redis) would make it exact.
+- **One reflection per week.** Rewriting a week replaces the earlier reflection in the journal rather than keeping both.
+
+## Screenshots
+
+Generated with `npx tsx scripts/screenshots.ts` against a running dev server.

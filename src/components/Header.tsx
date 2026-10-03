@@ -1,0 +1,24 @@
+import { href, type Route } from "../lib/hooks";
+
+const TABS: { route: Route; label: string }[] = [
+  { route: { page: "write" }, label: "This week" },
+  { route: { page: "history" }, label: "Journal" },
+  { route: { page: "progress" }, label: "Progress" },
+];
+
+export default function Header({ current }: { current: Route["page"] }) {
+  return (
+    <header className="site-header">
+      <a href="#/" className="wordmark">
+        Growth Mirror
+      </a>
+      <nav aria-label="Main">
+        {TABS.map((t) => (
+          <a key={t.label} href={href(t.route)} aria-current={current === t.route.page ? "page" : undefined}>
+            {t.label}
+          </a>
+        ))}
+      </nav>
+    </header>
+  );
+}
