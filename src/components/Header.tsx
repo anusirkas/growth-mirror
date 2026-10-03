@@ -1,3 +1,4 @@
+import { ScanEye } from "lucide-react";
 import { href, type Route } from "../lib/hooks";
 import ThemeToggle from "./ThemeToggle";
 
@@ -11,6 +12,9 @@ export default function Header({ current }: { current: Route["page"] }) {
   return (
     <header className="site-header">
       <a href="#/" className="wordmark">
+        <span className="logo-mark" aria-hidden="true">
+          <ScanEye size={18} strokeWidth={2.2} />
+        </span>
         Growth Mirror
       </a>
       <nav aria-label="Main">

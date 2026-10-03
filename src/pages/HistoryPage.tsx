@@ -2,7 +2,8 @@ import FollowThrough from "../components/FollowThrough";
 import ResultCard from "../components/ResultCard";
 import { href, useJournal } from "../lib/hooks";
 import { byWeek, removeEntry, replaceJournal, weekLabel } from "../lib/journal";
-import { THEMES } from "../lib/themes";
+import Stamp from "../components/Stamp";
+import ThemeTag from "../components/ThemeTag";
 import type { ReflectionInput } from "../types";
 
 const QUESTIONS: [keyof ReflectionInput, string][] = [
@@ -75,17 +76,14 @@ export default function HistoryPage({ id }: { id?: string }) {
       ) : (
         <ol className="entries">
           {entries.map((e) => {
-            const theme = THEMES[e.response.result.theme];
             return (
               <li key={e.id}>
                 <a href={href({ page: "history", id: e.id })} className="entry">
                   <span className="entry-week">{weekLabel(e.weekStart)}</span>
-                  <span className="theme-tag" style={{ "--tag": theme.color } as React.CSSProperties}>
-                    {theme.short}
-                  </span>
+                  <ThemeTag theme={e.response.result.theme} short />
                   <span className="entry-step">{e.response.result.practicalNextStep}</span>
-                  <span className={`entry-done done-${String(e.followedThrough)}`}>
-                    {e.followedThrough === null ? "–" : e.followedThrough ? "Done" : "Not yet"}
+                  <span className="entry-done">
+                    <Stamp done={e.followedThrough} />
                   </span>
                 </a>
               </li>

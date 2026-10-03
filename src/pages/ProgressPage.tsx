@@ -1,5 +1,6 @@
 import { href, useJournal } from "../lib/hooks";
 import { byWeek, isoWeek, journalStats, weekLabel } from "../lib/journal";
+import Stamp from "../components/Stamp";
 import { THEMES } from "../lib/themes";
 import type { Theme } from "../types";
 
@@ -84,8 +85,8 @@ export default function ProgressPage() {
                     </span>
                     <span className="tl-step">{e.response.result.practicalNextStep}</span>
                   </span>
-                  <span className={`entry-done done-${String(e.followedThrough)}`}>
-                    {e.followedThrough === null ? "–" : e.followedThrough ? "Done" : "Not yet"}
+                  <span className="entry-done">
+                    <Stamp done={e.followedThrough} />
                   </span>
                 </a>
               </li>

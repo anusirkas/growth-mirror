@@ -44,7 +44,9 @@ export default function WritePage() {
   return (
     <div className={`write ${saved ? "has-result" : ""}`}>
       <div className="write-intro">
-        <h1>How did this week go?</h1>
+        <h1>
+          How did <mark>this week</mark> go?
+        </h1>
         <p>Five questions, about ten minutes. You get back where you grew, what's slowing you down and one concrete step.</p>
       </div>
 

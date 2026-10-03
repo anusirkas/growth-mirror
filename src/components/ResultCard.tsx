@@ -1,4 +1,5 @@
-import { THEMES } from "../lib/themes";
+import { Paperclip } from "lucide-react";
+import ThemeTag from "./ThemeTag";
 import type { ReflectionResponse } from "../types";
 
 type ResultCardProps = {
@@ -23,15 +24,13 @@ const SECTIONS = [
 
 export default function ResultCard({ response, footer }: ResultCardProps) {
   const { result, source, reason, model } = response;
-  const theme = THEMES[result.theme];
 
   return (
     <article className="reflection" aria-live="polite">
+      <Paperclip className="clip" size={44} strokeWidth={1.6} aria-hidden="true" />
       <header className="reflection-head">
         <p className="label">Reflection</p>
-        <p className="theme-tag" style={{ "--tag": theme.color } as React.CSSProperties}>
-          {theme.label}
-        </p>
+        <ThemeTag theme={result.theme} />
       </header>
 
       {SECTIONS.map((s) => (
@@ -41,7 +40,8 @@ export default function ResultCard({ response, footer }: ResultCardProps) {
         </section>
       ))}
 
-      <section className="note step">
+      <section className="note step sticky">
+        <span className="tape" aria-hidden="true" />
         <h3>Your next step</h3>
         <p>{result.practicalNextStep}</p>
         {footer}
