@@ -1,4 +1,5 @@
 import { href, type Route } from "../lib/hooks";
+import ThemeToggle from "./ThemeToggle";
 
 const TABS: { route: Route; label: string }[] = [
   { route: { page: "write" }, label: "This week" },
@@ -18,6 +19,7 @@ export default function Header({ current }: { current: Route["page"] }) {
             {t.label}
           </a>
         ))}
+        <ThemeToggle />
       </nav>
     </header>
   );

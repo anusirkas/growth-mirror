@@ -26,8 +26,9 @@
   color-scheme: light;
 }
 
+/* dark: follows the system unless the visitor picked a theme */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --paper: #17191c;
     --page: #1e2125;
     --ink: #ece8df;
@@ -46,6 +47,26 @@
     --theme-momentum: #d9bd6a;
     color-scheme: dark;
   }
+}
+
+:root[data-theme="dark"] {
+  --paper: #17191c;
+  --page: #1e2125;
+  --ink: #ece8df;
+  --ink-2: #c4c0b6;
+  --muted: #8f8b80;
+  --rule: #2e3237;
+  --rule-strong: #3d4248;
+  --margin: #a85c50;
+  --accent: #8fb0e3;
+  --accent-soft: rgba(143, 176, 227, 0.1);
+  --ok: #8cc097;
+  --warn: #e0a76a;
+  --theme-focus: #8fb0e3;
+  --theme-technical: #9cc39f;
+  --theme-confidence: #e0987a;
+  --theme-momentum: #d9bd6a;
+  color-scheme: dark;
 }
 
 * {
@@ -135,6 +156,7 @@ main {
 
 .site-header nav {
   display: flex;
+  align-items: center;
   gap: 4px;
 }
 
@@ -148,6 +170,23 @@ main {
 
 .site-header nav a:hover {
   color: var(--ink);
+}
+
+.theme-toggle {
+  width: 34px;
+  height: 34px;
+  margin-left: 6px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  color: var(--ink);
+  border-color: var(--ink-2);
 }
 
 .site-header nav a[aria-current="page"] {

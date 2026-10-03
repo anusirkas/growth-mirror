@@ -71,12 +71,12 @@ e2e/                      Playwright tests
 
 ```bash
 npm test           # 18 unit tests (Vitest)
-npm run test:e2e   # 16 end-to-end tests (Playwright, desktop and mobile)
+npm run test:e2e   # 18 end-to-end tests (Playwright, desktop and mobile)
 ```
 
 Unit tests cover input validation, parsing model output, the fallback scorer, ISO weeks and journal stats, and the request handler in every branch: success, bad input, no key, model error, off-schema output, timeout (fake timers) and rate limiting. The model is injected, so tests never call Gemini.
 
-End-to-end tests run the dev server with the key blanked and stub the API in the browser where needed: AI and fallback results, an unreachable API, server validation errors, the example journal, follow-through updating the progress rate, and deleting a week from the timeline.
+End-to-end tests run the dev server with the key blanked and stub the API in the browser where needed: AI and fallback results, an unreachable API, server validation errors, the example journal, follow-through updating the progress rate, deleting a week from the timeline, and the light/dark toggle being remembered.
 
 CI runs lint, type-checking, unit tests and a production build, then the end-to-end suite, on every push.
 
