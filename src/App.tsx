@@ -1,30 +1,41 @@
 import { useState } from "react";
 import ReflectionForm from "./components/ReflectionForm";
 import ResultCard from "./components/ResultCard";
+import type { ReflectionInput, ReflectionResponse } from "./types";
 import { generateReflection } from "./utils/generateReflection";
-import type { ReflectionInput, ReflectionResult } from "./types";
 
 export default function App() {
-  const [result, setResult] = useState<ReflectionResult | null>(null);
+  const [response, setResponse] = useState<ReflectionResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleReflection(data: ReflectionInput) {
-    console.log("Reflection input:", data);
-
     setIsLoading(true);
-
-    // Mock delay to simulate AI processing
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
-    const smartResult = generateReflection(data);
-    setResult(smartResult);
-    setIsLoading(false);
+    setError(null);
+    try {
+      const res = await fetch("/api/reflect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        setError(body.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+      setResponse(body as ReflectionResponse);
+    } catch {
+      // offline or the API is unreachable: still give the user a reflection
+      setResponse({ result: generateReflection(data), source: "fallback", reason: "ai-error" });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
-    <main className={`app-shell ${result ? "has-result" : "no-result"}`}>
-      <ReflectionForm onSubmit={handleReflection} isLoading={isLoading} />
-      <ResultCard result={result} />
+    <main className={`app-shell ${response ? "has-result" : "no-result"}`}>
+      <ReflectionForm onSubmit={handleReflection} isLoading={isLoading} error={error} />
+      <ResultCard response={response} />
     </main>
   );
 }

@@ -12,6 +12,10 @@ function countMatches(
   }, 0);
 }
 
+/**
+ * Rule-based reflection: scores keywords across all answers and returns the
+ * strongest pattern. Used when the AI is unavailable, so the app always answers.
+ */
 export function generateReflection(
   data: ReflectionInput
 ): ReflectionResult {
@@ -84,6 +88,7 @@ export function generateReflection(
 
   if (highestScore === 0) {
     return {
+      theme: "momentum",
       progressSpotted:
         "You made meaningful progress by continuing to move forward despite uncertainty. Reflection itself is already part of strong long-term growth.",
       biggestGap:
@@ -97,6 +102,7 @@ export function generateReflection(
 
   if (focusScore === highestScore) {
     return {
+      theme: "focus",
       progressSpotted:
         "You are handling a high amount of responsibility and adapting across multiple priorities. The fact that you notice the problem already shows strong product awareness.",
       biggestGap:
@@ -110,6 +116,7 @@ export function generateReflection(
 
   if (techScore === highestScore) {
     return {
+      theme: "technical",
       progressSpotted:
         "You are building real technical depth by connecting learning directly to practical work. This is much stronger than passive studying because skill grows through repeated use.",
       biggestGap:
@@ -122,6 +129,7 @@ export function generateReflection(
   }
 
   return {
+    theme: "confidence",
     progressSpotted:
       "You are growing faster than you may recognize. Taking ownership in uncertain situations is already proof of professional growth, not a sign that you are behind.",
     biggestGap:
